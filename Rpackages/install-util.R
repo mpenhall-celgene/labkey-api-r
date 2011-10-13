@@ -5,30 +5,34 @@ if (length(grep("sampledata.rlabkey$", libdir)) == 0) {
 }
 
 
-# add the current executing directory (sampledata/rlabkey) to the library search path
-.libPaths(c(libdir, .libPaths()))
+# set the library search path to the current executing directory (sampledata/rlabkey)
+.libPaths(libdir)
+cat("library search path:\n  ", paste(.libPaths(), collapse="\n   "), "\n")
 
 
 is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
 
-install.dependencies <- function (packageName, cran_deps, bioc_deps)
+install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL)
 {
     if (!is.installed(packageName)) {
+        cat("library", packageName, "is not yet installed in", libdir, "\n")
 
         # install CRAN dependencies
         if (length(cran_deps) > 0) {
-            print("installing CRAN dependencies...")
-            install.packages(pkgs=cran_deps, lib=libdir, repos="http://cran.fhcrc.org/")
+            cat("installing CRAN dependencies...\n")
+            install.packages(pkgs=cran_deps, lib=libdir, destdir=".", repos="http://cran.fhcrc.org/")
+            cat("installed CRAN dependencies.\n")
         }
 
         # install BioC dependencies
         if (length(bioc_deps) > 0) {
-            print("installing BioConductor dependencies...")
+            cat("installing BioConductor dependencies...\n")
             source("http://bioconductor.org/biocLite.R")
-            biocLite(c, lib=libdir, destdir=".")
+            biocLite(bioc_deps, lib=libdir, destdir=".")
+            cat("installed BioConductor dependencies.\n")
         }
 
     } else {
-        print(paste(packageName, " is already installed"))
+        cat("library", packageName, "is already installed in", libdir, "\n")
     }
 }
