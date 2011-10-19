@@ -1,3 +1,19 @@
+##
+#  Copyright (c) 2010 LabKey Corporation
+# 
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+# 
+#      http://www.apache.org/licenses/LICENSE-2.0
+# 
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+##
+
 # ensure we are running from the sampledata/rlabkey directory
 libdir = getwd()
 if (length(grep("sampledata.rlabkey$", libdir)) == 0) {
@@ -10,29 +26,31 @@ if (length(grep("sampledata.rlabkey$", libdir)) == 0) {
 cat("library search path:\n  ", paste(.libPaths(), collapse="\n   "), "\n")
 
 
-is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
+is.installed <- function(mypkg) length(find.package(mypkg, quiet=TRUE)) > 0
 
 install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL)
 {
-    if (!is.installed(packageName)) {
-        cat("library", packageName, "is not yet installed in", libdir, "\n")
+    #if (!is.installed(packageName)) {
+    #    cat("library", packageName, "is not yet installed in", libdir, "\n")
 
-        # install CRAN dependencies
+        # install any missing CRAN dependencies
+        cran_deps <- cran_deps[!sapply(cran_deps, is.installed)]
         if (length(cran_deps) > 0) {
-            cat("installing CRAN dependencies...\n")
+            cat("installing CRAN dependencies:", cran_deps, "\n")
             install.packages(pkgs=cran_deps, lib=libdir, destdir=".", repos="http://cran.fhcrc.org/")
             cat("installed CRAN dependencies.\n")
         }
 
-        # install BioC dependencies
+        # install any missing BioC dependencies
+        bioc_deps <- bioc_deps[!sapply(bioc_deps, is.installed)]
         if (length(bioc_deps) > 0) {
-            cat("installing BioConductor dependencies...\n")
+            cat("installing BioConductor dependencies:", bioc_deps, "\n")
             source("http://bioconductor.org/biocLite.R")
             biocLite(bioc_deps, lib=libdir, destdir=".")
             cat("installed BioConductor dependencies.\n")
         }
 
-    } else {
-        cat("library", packageName, "is already installed in", libdir, "\n")
-    }
+    #} else {
+    #    cat("library", packageName, "is already installed in", libdir, "\n")
+    #}
 }
