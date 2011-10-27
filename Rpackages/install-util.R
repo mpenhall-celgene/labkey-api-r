@@ -28,7 +28,7 @@ cat("library search path:\n  ", paste(.libPaths(), collapse="\n   "), "\n")
 
 is.installed <- function(mypkg) length(find.package(mypkg, quiet=TRUE)) > 0
 
-install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL)
+install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, rwin_deps=NULL)
 {
     #if (!is.installed(packageName)) {
     #    cat("library", packageName, "is not yet installed in", libdir, "\n")
@@ -48,6 +48,14 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL)
             source("http://bioconductor.org/biocLite.R")
             biocLite(bioc_deps, lib=libdir, destdir=".")
             cat("installed BioConductor dependencies.\n")
+        }
+
+        # install any missing Windows binary dependencies (for RCurl)
+        rwin_deps <- rwin_deps[!sapply(rwin_deps, is.installed)]
+        if (length(rwin_deps) > 0) {
+            cat("installing RWin dependencies:", rwin_deps, "\n")
+            install.packages(pkgs=rwin_deps, lib=libdir, destdir=".", repos="http://www.stats.ox.ac.uk/pub/RWin/")
+            cat("installed RWin dependencies.\n")
         }
 
     #} else {

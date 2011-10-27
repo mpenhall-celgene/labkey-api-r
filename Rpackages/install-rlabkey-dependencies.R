@@ -15,4 +15,4 @@
 ##
 
 source("../../tools/Rpackages/install-util.R")
-install.dependencies("Rlabkey", c("RCurl", "rjson"))
+install.dependencies("Rlabkey", c("rjson"), NULL, c("RCurl"))
