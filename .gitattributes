@@ -3,8 +3,8 @@
 /check-installed.R -text
 /flowStats_2.1.0.tar.gz -text
 /flowStats_2.1.0.zip -text
-/flowWorkspace_0.99.22.zip -text
 /flowWorkspace_0.99.24.tar.gz -text
+/flowWorkspace_0.99.24.zip -text
 /install-flowStats-dependencies.R -text
 /install-flowWorkspace-dependencies.R -text
 /install-rlabkey-dependencies.R -text
