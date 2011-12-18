@@ -1,10 +1,10 @@
 * text=auto !eol
 /Ruminex_0.0.6.tar.gz -text
 /check-installed.R -text
-/flowStats_2.1.0.tar.gz -text
-/flowStats_2.1.0.zip -text
-/flowWorkspace_1.1.2.tar.gz -text
-/flowWorkspace_1.1.2.zip -text
+/flowStats_2.2.0.tar.gz -text
+/flowStats_2.2.0.zip -text
+/flowWorkspace_1.1.4.tar.gz -text
+/flowWorkspace_1.1.4.zip -text
 /install-flowStats-dependencies.R -text
 /install-flowWorkspace-dependencies.R -text
 /install-rlabkey-dependencies.R -text
