@@ -37,7 +37,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         cran_deps <- cran_deps[!sapply(cran_deps, is.installed)]
         if (length(cran_deps) > 0) {
             cat("installing CRAN dependencies:", cran_deps, "\n")
-            install.packages(pkgs=cran_deps, lib=libdir, destdir=".", repos="http://cran.fhcrc.org/")
+            install.packages(pkgs=cran_deps, lib=libdir, destdir=".", repos="http://cran.fhcrc.org/", INSTALL_opts=c("--no-multiarch"))
             cat("installed CRAN dependencies.\n")
         }
 
@@ -46,7 +46,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         if (length(bioc_deps) > 0) {
             cat("installing BioConductor dependencies:", bioc_deps, "\n")
             source("http://bioconductor.org/biocLite.R")
-            biocLite(bioc_deps, lib=libdir, destdir=".")
+            biocLite(bioc_deps, lib=libdir, destdir=".", INSTALL_opts=c("--no-multiarch"))
             cat("installed BioConductor dependencies.\n")
         }
 
@@ -54,7 +54,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         rwin_deps <- rwin_deps[!sapply(rwin_deps, is.installed)]
         if (length(rwin_deps) > 0) {
             cat("installing RWin dependencies:", rwin_deps, "\n")
-            install.packages(pkgs=rwin_deps, lib=libdir, destdir=".", repos="http://www.stats.ox.ac.uk/pub/RWin/")
+            install.packages(pkgs=rwin_deps, lib=libdir, destdir=".", repos="http://www.stats.ox.ac.uk/pub/RWin/", INSTALL_opts=c("--no-multiarch"))
             cat("installed RWin dependencies.\n")
         }
 

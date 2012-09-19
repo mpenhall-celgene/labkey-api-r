@@ -15,12 +15,12 @@
 ##
 
 vers <- getRversion()
-if (vers < "2.13") {
-    stop("Your R version is ", vers, ". The flowWorkspace library requires R version 2.13 or greater")
+if (vers < "2.15.1") {
+    stop("Your R version is ", vers, ". The flowWorkspace library requires R version 2.15.1 or greater")
 }
 
 source("../../tools/Rpackages/install-util.R")
 install.dependencies("flowWorkspace",
     c("rrcov", "feature", "robustbase", "pcaPP", "mvtnorm", "ks", "hexbin", "Cairo"),
-    c("RBGL", "graph", "XML", "flowCore", "flowViz", "Rgraphviz", "Biobase", "IDPmisc"))
+    c("BiocGenerics", "RBGL", "graph", "XML", "flowCore", "flowViz", "Rgraphviz", "Biobase", "IDPmisc"))
 
