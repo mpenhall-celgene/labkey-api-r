@@ -54,7 +54,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         rwin_deps <- rwin_deps[!sapply(rwin_deps, is.installed)]
         if (length(rwin_deps) > 0) {
             cat("installing RWin dependencies:", rwin_deps, "\n")
-            install.packages(pkgs=rwin_deps, lib=libdir, destdir=".", repos="http://www.stats.ox.ac.uk/pub/RWin/", INSTALL_opts=c("--no-multiarch"))
+            install.packages(pkgs=rwin_deps, lib=libdir, destdir=".", INSTALL_opts=c("--no-multiarch"))
             cat("installed RWin dependencies.\n")
         }
 
