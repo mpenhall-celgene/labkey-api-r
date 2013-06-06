@@ -7,6 +7,7 @@
 /flowWorkspace_1.3.1.zip -text
 /install-flowStats-dependencies.R -text
 /install-flowWorkspace-dependencies.R -text
+/install-knitr.R -text
 /install-rlabkey-dependencies.R -text
 /install-ruminex-dependencies.R -text
 /install-util.R -text
