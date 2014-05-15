@@ -7,5 +7,6 @@
 /install-knitr.R -text
 /install-rlabkey-dependencies.R -text
 /install-ruminex-dependencies.R -text
+/install-survival.R -text
 /install-util.R -text
 /readme.txt -text
