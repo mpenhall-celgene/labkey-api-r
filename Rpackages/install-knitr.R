@@ -16,4 +16,4 @@
 
 source("../../tools/Rpackages/install-util.R")
 
-install.dependencies("knitr", c("evaluate", "digest", "formatR", "markdown", "stringr", "knitr", "RJSONIO"))
+install.dependencies("knitr", c("evaluate", "digest", "formatR", "markdown", "stringr", "knitr", "RJSONIO", "rmarkdown"))
