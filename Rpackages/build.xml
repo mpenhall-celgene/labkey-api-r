@@ -30,7 +30,7 @@
         <os family="unix" />
     </condition>
     <property environment="env"/>
-    <condition property="r.libs.user" value="${env.R_LIBS_USER}" else="${r.libs.user}">
+    <condition property="r.libs.user" value="${env.R_LIBS_USER}">
         <isset property="env.R_LIBS_USER"/>
     </condition>
 
@@ -40,7 +40,7 @@
     </target>
 
     <!-- Rely on our own private file that we touch every time we install R packages to see if they need to be reinstalled -->
-    <target name="install-rpackages">
+    <target name="install-rpackages" depends="locate-R">
         <uptodate targetfile="${deployment.timestamp.file}" property="rPackagesUpToDate">
             <srcfiles dir="${rpackages.dir}" />
         </uptodate>
@@ -200,8 +200,6 @@
     </target>
 
     <target name="locate-R">
-        <mkdir dir="${r.libs.user}"/>
-
         <condition property="r.path" value="${env.R_HOME}/bin/R.exe"><available file="${env.R_HOME}/bin/R.exe"/></condition>
         <condition property="r.path" value="${env.R_HOME}/bin/R"><available file="${env.R_HOME}/bin/R"/></condition>
         <condition property="r.path" value="${env.R_HOME}/R.exe"><available file="${env.R_HOME}/R.exe"/></condition>
@@ -232,6 +230,15 @@
         <echo message="r.path: ${r.path}"/>
         <echo message="rterm.path: ${rterm.path}"/>
         <antcall target="fail_R"/>
+        <antcall target="mk_R_LIBS_USER"/>
+    </target>
+
+    <target name="mk_R_LIBS_USER" if="r.libs.user" depends="warn_R_LIBS_USER">
+        <mkdir dir="${r.libs.user}"/>
+    </target>
+
+    <target name="warn_R_LIBS_USER" unless="r.libs.user">
+        <echo message="Unable to create R package install directory. Please ensure that R_LIBS_USER is defined or specify r.libs.user when running."/>
     </target>
 
     <target name="fail_R" unless="R.present">
