@@ -14,7 +14,6 @@
 #  limitations under the License.
 ##
 
-source("../../tools/Rpackages/install-util.R")
-
+source("install-util.R")
 install.dependencies("kinship2", c("getopt", "Matrix", "quadprog", "kinship2"))
 install.dependencies("pedigree", c("HaploSim", "reshape", "pedigree"))

@@ -14,7 +14,7 @@
 #  limitations under the License.
 ##
 
-source("../../tools/Rpackages/install-util.R")
+source("install-util.R")
 OS.type <- .Platform$OS.type
 if (OS.type == "unix") {
     cran_pkgs = c("rjson", "RCurl")

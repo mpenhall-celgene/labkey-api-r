@@ -14,31 +14,40 @@
 #  limitations under the License.
 ##
 
-# ensure we are running from the sampledata/rlabkey directory
-libdir = getwd()
-if (length(grep("sampledata.rlabkey$", libdir)) == 0) {
-    stop("Please run this script from the sampledata/rlabkey directory")
+# ensure that R_LIBS_USER is defined
+libdir = Sys.getenv("R_LIBS_USER")
+if (length(args)==0) {
+    stop("R_LIBS_USER is not defined.\n", call.=FALSE)
 }
 
-
-# set the library search path to the current executing directory (sampledata/rlabkey)
+# set the library search path to R_LIBS_USER
 .libPaths(libdir)
 cat("library search path:\n  ", paste(.libPaths(), collapse="\n   "), "\n")
 
-
 is.installed <- function(mypkg) length(find.package(mypkg, quiet=TRUE)) > 0
+
+check.installed <- function(mypkg)
+{
+    isInstalled <- is.installed(mypkg)
+
+    if (isInstalled) {
+        cat("library", packageName, "is installed in", libdir, "\n")
+    } else {
+        cat("library", packageName, "is not yet installed in", libdir, "\n")
+    }
+
+    isInstalled
+}
 
 install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, rwin_deps=NULL)
 {
     options(repos=structure(c(CRAN="http://cran.fhcrc.org/")))
-    #if (!is.installed(packageName)) {
-    #    cat("library", packageName, "is not yet installed in", libdir, "\n")
 
         # install any missing CRAN dependencies
         cran_deps <- cran_deps[!sapply(cran_deps, is.installed)]
         if (length(cran_deps) > 0) {
             cat("installing CRAN dependencies:", cran_deps, "\n")
-            install.packages(pkgs=cran_deps, lib=libdir, destdir=".", repos="http://cran.fhcrc.org/", INSTALL_opts=c("--no-multiarch"))
+            install.packages(pkgs=cran_deps, lib=libdir, destdir=libdir, repos="http://cran.fhcrc.org/", INSTALL_opts=c("--no-multiarch"))
             cat("installed CRAN dependencies.\n")
         }
 
@@ -47,7 +56,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         if (length(bioc_deps) > 0) {
             cat("installing BioConductor dependencies:", bioc_deps, "\n")
             source("http://bioconductor.org/biocLite.R")
-            biocLite(bioc_deps, lib=libdir, destdir=".", INSTALL_opts=c("--no-multiarch"))
+            biocLite(bioc_deps, lib=libdir, destdir=libdir, INSTALL_opts=c("--no-multiarch"))
             cat("installed BioConductor dependencies.\n")
         }
 
@@ -55,11 +64,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         rwin_deps <- rwin_deps[!sapply(rwin_deps, is.installed)]
         if (length(rwin_deps) > 0) {
             cat("installing RWin dependencies:", rwin_deps, "\n")
-            install.packages(pkgs=rwin_deps, lib=libdir, repos=c("http://cran.fhcrc.org/", "http://www.stats.ox.ac.uk/pub/RWin"), destdir=".", INSTALL_opts=c("--no-multiarch"))
+            install.packages(pkgs=rwin_deps, lib=libdir, destdir=libdir, repos=c("http://cran.fhcrc.org/", "http://www.stats.ox.ac.uk/pub/RWin"), INSTALL_opts=c("--no-multiarch"))
             cat("installed RWin dependencies.\n")
         }
-
-    #} else {
-    #    cat("library", packageName, "is already installed in", libdir, "\n")
-    #}
 }

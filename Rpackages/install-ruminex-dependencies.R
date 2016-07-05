@@ -14,5 +14,5 @@
 #  limitations under the License.
 ##
 
-source("../../tools/Rpackages/install-util.R")
+source("install-util.R")
 install.dependencies("Ruminex", c("drc", "xtable", "alr3", "Cairo", "plotrix"))

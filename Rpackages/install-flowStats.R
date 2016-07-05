@@ -14,7 +14,6 @@
 #  limitations under the License.
 ##
 
-source("../../tools/Rpackages/install-util.R")
-
+source("install-util.R")
 install.dependencies("flowStats", c(), c("flowStats"))
 

@@ -21,15 +21,12 @@ if (length(args) == 0) {
 }
 packageName = args[1]
 
-
-source("../../tools/Rpackages/install-util.R")
+source("install-util.R")
 
 # check if library is installed: exit code 0 is installed, 1 is not installed
-if (is.installed(packageName)) {
-    cat("library", packageName, "is installed in", getwd(), "\n")
+if (check.installed(packageName)) {
     q(save="no", status=0)
 } else {
-    cat("library", packageName, "is not yet installed in", getwd(), "\n")
     q(save="no", status=1)
 }
 

@@ -19,6 +19,5 @@ if (vers < "2.15.1") {
     stop("Your R version is ", vers, ". The flowWorkspace library requires R version 2.15.1 or greater")
 }
 
-source("../../tools/Rpackages/install-util.R")
-
+source("install-util.R")
 install.dependencies("flowWorkspace", c(), c("flowWorkspace"))
