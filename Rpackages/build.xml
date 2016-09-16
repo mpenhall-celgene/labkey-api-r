@@ -172,9 +172,16 @@
 
     <target name="check-knitr-installed" if="R.present" depends="locate-R">
         <check-R-package-installed package="knitr" />
+        <check-R-package-installed package="rmarkdown" />
+        <condition property="knitr.dependencies.uninstalled" value="true">
+            <or>
+                <isset property="knitr.uninstalled"/>
+                <isset property="rmarkdown.uninstalled"/>
+            </or>
+        </condition>
     </target>
 
-    <target name="install-knitr" if="knitr.uninstalled" depends="check-knitr-installed">
+    <target name="install-knitr" if="knitr.dependencies.uninstalled" depends="check-knitr-installed">
         <install-R-packages script.name="install-knitr.R"/>
     </target>
 
