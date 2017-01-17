@@ -20,7 +20,8 @@ if (OS.type == "unix") {
     cran_pkgs = c("rjson", "RCurl", "fasttime", "Rcpp")
     rwin_pkgs = NULL
 } else if (OS.type == "windows") {
-    cran_pkgs = c("rjson", "bitops", "Rcpp")
-    rwin_pkgs = c("RCurl", "fasttime")
+    cran_pkgs = c("rjson", "bitops", "Rcpp", "fasttime")
+    rwin_pkgs = c("RCurl")
 }
 install.dependencies("Rlabkey", cran_pkgs, NULL, rwin_pkgs)
+
