@@ -1,5 +1,6 @@
 * text=auto !eol
 /Ruminex_0.0.9.tar.gz -text
+/build.gradle -text
 /build.xml -text
 /check-installed.R -text
 /install-ehr-dependencies.R -text
