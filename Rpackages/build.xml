@@ -209,7 +209,7 @@
     </target>
 
     <target name="check-survival-installed" if="R.present" depends="locate-R">
-        <check-R-package-installed package="flowWorkspace"/>
+        <check-R-package-installed package="survival"/>
     </target>
 
     <target name="install-rsurvival" if="survival.uninstalled" depends="check-survival-installed">

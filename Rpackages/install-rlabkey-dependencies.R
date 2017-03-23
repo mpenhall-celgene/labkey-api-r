@@ -17,11 +17,10 @@
 source("install-util.R")
 OS.type <- .Platform$OS.type
 if (OS.type == "unix") {
-    cran_pkgs = c("rjson", "RCurl", "fasttime", "Rcpp")
+    cran_pkgs = c("rjson", "RCurl", "Rcpp")
     rwin_pkgs = NULL
 } else if (OS.type == "windows") {
-    cran_pkgs = c("rjson", "bitops", "Rcpp", "fasttime")
+    cran_pkgs = c("rjson", "bitops", "Rcpp")
     rwin_pkgs = c("RCurl")
 }
 install.dependencies("Rlabkey", cran_pkgs, NULL, rwin_pkgs)
-
