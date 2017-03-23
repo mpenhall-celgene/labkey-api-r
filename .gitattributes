@@ -3,6 +3,11 @@
 /build.gradle -text
 /build.xml -text
 /check-installed.R -text
+/gradle.properties -text
+gradle/wrapper/gradle-wrapper.jar -text
+gradle/wrapper/gradle-wrapper.properties -text
+/gradlew -text
+/gradlew.bat -text
 /install-ehr-dependencies.R -text
 /install-flowStats.R -text
 /install-flowWorkspace.R -text
