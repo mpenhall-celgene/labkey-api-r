@@ -26,8 +26,12 @@
 	colModelNames = c()
 	colModelLabels = c()
 	for(i in 1:length(decode$columnModel)){
-		colModelNames[[i]] = decode$columnModel[[i]]$dataIndex
-		colModelLabels[[i]] = decode$columnModel[[i]]$header
+		if(!is.null(decode$columnModel[[i]]$dataIndex)){
+			colModelNames[[i]] = decode$columnModel[[i]]$dataIndex
+		}
+		if(!is.null(decode$columnModel[[i]]$header)){
+			colModelLabels[[i]] = decode$columnModel[[i]]$header
+		}
 	}
 
 	## Check for invalid colSelect name
