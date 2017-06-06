@@ -23,22 +23,21 @@
 		stop('No columns exist in the result set. Be sure you are using the column name for colNameOpt="fieldname" and the column label for colNameOpt="caption" in the colSelect vector. See the documentation for more details.')
 	}
 
-    colSelectVector <- NULL
-    if(!is.null(colSelect)){
-        colSelectVector <- strsplit(colSelect, ",")[[1]]
-    }
+	colModelNames = c()
+	colModelLabels = c()
+	for(i in 1:length(decode$columnModel)){
+		colModelNames[[i]] = decode$columnModel[[i]]$dataIndex
+		colModelLabels[[i]] = decode$columnModel[[i]]$header
+	}
 
 	## Check for invalid colSelect name
-	if(!is.null(colSelectVector)){
-		colModelNames = c()
-		colModelLabels = c()
-		for(i in 1:length(decode$columnModel)){
-			colModelNames[[i]] = decode$columnModel[[i]]$dataIndex
-			colModelLabels[[i]] = decode$columnModel[[i]]$header
-		}
-
+	colSelectVector <- NULL
+	if(!is.null(colSelect)){
+		colSelectVector <- strsplit(colSelect, ",")[[1]]
+	}
+	if(!is.null(colSelectVector) & length(colSelectVector)>0){
 		for(i in 1:length(colSelectVector)){
-			if((colNameOpt == "fieldname" & !(colSelectVector[[i]] %in% colModelNames)) | (colNameOpt == "caption" & !(colSelectVector[[i]] %in% colModelLabels))){
+			if(!(colSelectVector[[i]] %in% colModelNames) & !(colSelectVector[[i]] %in% colModelLabels)){
 				stop(paste('The column "',colSelectVector[[i]],'" specified in the colSelect variable does not exist in the result set. Be sure you are using the column name for colNameOpt="fieldname" and the column label for colNameOpt="caption". See the documentation for more details.',sep=''))
 			}
 		}
