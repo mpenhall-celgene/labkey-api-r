@@ -1,6 +1,6 @@
 Package: Rlabkey
 Version: 2.1.135
-Date: 2017-06-05
+Date: 2017-06-07
 Title: Data Exchange Between R and LabKey Server
 Author: Peter Hussey 
 Maintainer: Cory Nathe <cnathe@labkey.com>
