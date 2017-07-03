@@ -25,9 +25,11 @@
 
 	colModelNames = c()
 	colModelLabels = c()
+	colModelRNames = c()
 	for(i in 1:length(decode$columnModel)){
 		if(!is.null(decode$columnModel[[i]]$dataIndex)){
 			colModelNames[[i]] = decode$columnModel[[i]]$dataIndex
+			colModelRNames[[i]] = .getRNameFromName(decode$columnModel[[i]]$dataIndex, existing=colModelRNames)
 		}
 		if(!is.null(decode$columnModel[[i]]$header)){
 			colModelLabels[[i]] = decode$columnModel[[i]]$header
@@ -41,7 +43,7 @@
 	}
 	if(!is.null(colSelectVector) & length(colSelectVector)>0){
 		for(i in 1:length(colSelectVector)){
-			if(!(colSelectVector[[i]] %in% colModelNames) & !(colSelectVector[[i]] %in% colModelLabels)){
+			if(!(colSelectVector[[i]] %in% colModelNames) & !(colSelectVector[[i]] %in% colModelLabels) & !(colSelectVector[[i]] %in% colModelRNames)){
 				stop(paste('The column "',colSelectVector[[i]],'" specified in the colSelect variable does not exist in the result set. Be sure you are using the column name for colNameOpt="fieldname" and the column label for colNameOpt="caption". See the documentation for more details.',sep=''))
 			}
 		}
