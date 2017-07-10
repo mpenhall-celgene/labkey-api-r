@@ -28,11 +28,11 @@
 	colModelRNames = c()
 	for(i in 1:length(decode$columnModel)){
 		if(!is.null(decode$columnModel[[i]]$dataIndex)){
-			colModelNames[[i]] = decode$columnModel[[i]]$dataIndex
-			colModelRNames[[i]] = .getRNameFromName(decode$columnModel[[i]]$dataIndex, existing=colModelRNames)
+			colModelNames = c(colModelNames, decode$columnModel[[i]]$dataIndex)
+			colModelRNames = c(colModelRNames, .getRNameFromName(decode$columnModel[[i]]$dataIndex, existing=colModelRNames))
 		}
 		if(!is.null(decode$columnModel[[i]]$header)){
-			colModelLabels[[i]] = decode$columnModel[[i]]$header
+			colModelLabels = c(colModelLabels, decode$columnModel[[i]]$header)
 		}
 	}
 
@@ -194,8 +194,8 @@ return(filtered)
 .getRNameFromName <- function(lkname, existing=NULL)
 {
 	rname <- tolower(chartr(" /", "__", lkname))
-	
-	if (length(existing)>0) 
+
+	if (length(existing)>0)
 	{ 
 		for (i in 1:99)
 		{
