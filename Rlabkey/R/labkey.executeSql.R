@@ -40,7 +40,7 @@ myurl <- paste(baseUrl, "query", folderPath, "executeSql.api", sep="")
 ## Construct parameters
 params <- list(schemaName=schemaName, apiVersion=8.3, sql=sql)
 if(is.null(maxRows)==FALSE) {params <- c(params, list(maxRows=maxRows))}
-if(is.null(maxRows)==TRUE) {params <- c(params, list(showRows="all"))}
+if(is.null(maxRows)==TRUE) {params <- c(params, list(maxRows="-1"))}
 if(is.null(rowOffset)==FALSE) {params <- c(params, list(offset=rowOffset))}
 if(is.null(colSort)==FALSE) {params <- c(params, list(query.sort=colSort))}
 if(is.null(parameters)==FALSE) {for(k in 1:length(parameters)) params <- c(params, list("query.param."=parameters[k]))}

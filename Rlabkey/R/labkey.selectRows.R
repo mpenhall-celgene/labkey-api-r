@@ -73,7 +73,7 @@ myurl <- paste(baseUrl,"query",folderPath,"selectRows.api?schemaName=",schemaNam
 if(is.null(viewName)==FALSE) {myurl <- paste(myurl,"&query.viewName=",viewName,sep="")}
 if(is.null(colSelect2)==FALSE) {myurl <- paste(myurl,"&query.columns=",colSelect2,sep="")}
 if(is.null(maxRows)==FALSE) {myurl <- paste(myurl,"&query.maxRows=",maxRows,sep="")}
-if(is.null(maxRows)==TRUE) {myurl <- paste(myurl,"&query.showRows=all",sep="")}
+if(is.null(maxRows)==TRUE) {myurl <- paste(myurl,"&query.maxRows=-1",sep="")}
 if(is.null(rowOffset)==FALSE) {myurl <- paste(myurl,"&query.offset=",rowOffset,sep="")}
 if(is.null(colSort)==FALSE) {myurl <- paste(myurl,"&query.sort=",colSort,sep="")}
 if(is.null(colFilter)==FALSE) {for(j in 1:length(colFilter)) myurl <- paste(myurl,"&query.",colFilter[j],sep="")}
