@@ -88,16 +88,17 @@ if(is.null(method) == FALSE && method == "GET") {
     myurl <- paste(baseUrl, "query", folderPath, "selectRows.api", sep="")
     params <- list(schemaName=schemaName, queryName=queryName, apiVersion=apiVersion)
     if (!is.null(includeDisplayValues) && includeDisplayValues == TRUE) {params <- c(params, list(includeDisplayValues="true"))}
+    if(is.null(containerFilter)==FALSE) {params <- c(params, list(containerFilter=containerFilter))}
     if(is.null(viewName)==FALSE) {params <- c(params, list(viewName=viewName))}
     if(is.null(colSelect)==FALSE) {params <- c(params, list("query.columns"=colSelect))}
     if(is.null(maxRows)==FALSE) {params <- c(params, list("query.maxRows"=maxRows))}
     if(is.null(maxRows)==TRUE) {params <- c(params, list("query.maxRows"=-1))}
     if(is.null(rowOffset)==FALSE) {params <- c(params, list("query.offset"=rowOffset))}
     if(is.null(colSort)==FALSE) {params <- c(params, list("query.sort"=colSort))}
-    if(is.null(containerFilter)==FALSE) {params <- paste(params, list(containerFilter=containerFilter))}
     if(is.null(colFilter)==FALSE) {for(j in 1:length(colFilter)) {
-        key = paste("query.",strsplit(colFilter[j],"=")[[1]][1],sep="")
-        value = strsplit(colFilter[j],"=")[[1]][2]
+        # note that the makFilter call uses curlEscape() so we need to unescape here
+        key = paste("query.",curlUnescape(strsplit(colFilter[j],"=")[[1]][1]),sep="")
+        value = curlUnescape(strsplit(colFilter[j],"=")[[1]][2])
         params[key] = value
     }}
     if(is.null(parameters)==FALSE) {for(k in 1:length(parameters)) {
