@@ -85,12 +85,10 @@ The requested data are returned in a data frame with stringsAsFactors set to FAL
 
 }
 \examples{
-\dontrun{
-
-
-# library(Rlabkey)
+\donttest{
 
 ## select from a list named AllTypes
+# library(Rlabkey)
 
 rows <- labkey.selectRows(
 	baseUrl="http://localhost:8080/labkey",

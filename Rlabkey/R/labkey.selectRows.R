@@ -1,5 +1,5 @@
 ##
-#  Copyright (c) 2008-2015 Fred Hutchinson Cancer Research Center
+#  Copyright (c) 2010-2017 LabKey Corporation
 # 
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -81,8 +81,6 @@ if(is.null(method) == FALSE && method == "GET") {
     if(is.null(parameters)==FALSE) {for(k in 1:length(parameters)) myurl <- paste(myurl,"&query.param.",parameters[k],sep="")}
     if(is.null(containerFilter)==FALSE) {myurl <- paste(myurl,"&containerFilter=",containerFilter,sep="")}
 
-print(myurl);
-
     ## Execute via our standard GET function
     mydata <- labkey.get(myurl);
 } else {
@@ -107,9 +105,6 @@ print(myurl);
         value = strsplit(parameters[k],"=")[[1]][2]
         params[key] = value
     }}
-
-print(myurl);
-print(toJSON(params));
 
     ## Execute via our standard POST function
     mydata <- labkey.post(myurl, toJSON(params))
