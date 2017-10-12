@@ -5,11 +5,12 @@
 Import full datasets or selected rows into R. The data can be sorted and filtered prior to import.
 }
 \usage{
-labkey.selectRows(baseUrl, folderPath, schemaName, queryName, 
+labkey.selectRows(baseUrl = NULL, folderPath, schemaName, queryName,
     viewName = NULL, colSelect = NULL, maxRows = NULL,
     rowOffset = NULL, colSort = NULL, colFilter = NULL,
     showHidden = FALSE, colNameOpt="caption",
-    containerFilter=NULL, parameters=NULL, includeDisplayValues=FALSE)
+    containerFilter = NULL, parameters = NULL,
+    includeDisplayValues = FALSE, method = "POST")
 }
 \arguments{
   \item{baseUrl}{a string specifying the \code{baseUrl}for the labkey server}
@@ -39,6 +40,7 @@ column name, operator and value of the filter(s) to be applied to the retrieved 
   }
   \item{parameters}{(optional) List of name/value pairs for the parameters if the SQL references underlying queries that are parameterized. For example, parameters=c("X=1", "Y=2").}
   \item{includeDisplayValues}{(optional) a logical value indicating if display values should be included in the response object for lookup fields.}
+  \item{method}{(optional) HTTP method to use for the request, defaults to POST.}
 }
 \details{
 A full dataset or any portion of a dataset can be downloaded  into an R data frame using the 

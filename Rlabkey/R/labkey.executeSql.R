@@ -46,10 +46,8 @@ if(is.null(colSort)==FALSE) {params <- c(params, list(query.sort=colSort))}
 if(is.null(parameters)==FALSE) {for(k in 1:length(parameters)) params <- c(params, list("query.param."=parameters[k]))}
 if(is.null(containerFilter)==FALSE) {params <- paste(params, list("containerFilter"=containerFilter))}
 
-pbody <- toJSON(params)
-
 ## Execute via our standard POST function
-mydata <- labkey.post(myurl, pbody)
+mydata <- labkey.post(myurl, toJSON(params))
 
 newdata <- makeDF(rawdata=mydata, showHidden=showHidden, colNameOpt=colNameOpt)
 
