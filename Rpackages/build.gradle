@@ -2,7 +2,7 @@ buildscript {
   repositories {
     jcenter()
     maven {
-      url "${artifactory_contextUrl}/${gradlePluginsVersion.endsWith('SNAPSHOT') ? 'plugins-snapshot-local' : 'plugins-release-local'}"
+      url "${artifactory_contextUrl}/${gradlePluginsVersion.endsWith('SNAPSHOT') ? 'plugins-snapshot-local' : 'plugins-release'}"
     }
     maven {
       url "${artifactory_contextUrl}/libs-release"
