@@ -11,6 +11,7 @@ gradle/wrapper/gradle-wrapper.properties -text
 /install-flowStats.R -text
 /install-flowWorkspace.R -text
 /install-knitr.R -text
+/install-medimmune-dependencies.R -text
 /install-rlabkey-dependencies.R -text
 /install-ruminex-dependencies.R -text
 /install-survival.R -text

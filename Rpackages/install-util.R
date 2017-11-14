@@ -31,9 +31,9 @@ check.installed <- function(mypkg)
     isInstalled <- is.installed(mypkg)
 
     if (isInstalled) {
-        cat("library", packageName, "is installed in", libdir, "\n")
+        cat("library", mypkg, "is installed in", libdir, "\n")
     } else {
-        cat("library", packageName, "is not yet installed in", libdir, "\n")
+        cat("library", mypkg, "is not yet installed in", libdir, "\n")
     }
 
     isInstalled
