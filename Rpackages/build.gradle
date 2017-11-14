@@ -1,3 +1,6 @@
+import org.labkey.gradle.task.InstallRPackage
+import org.labkey.gradle.util.GroupNames
+
 buildscript {
   repositories {
     jcenter()
@@ -18,3 +21,15 @@ buildscript {
 }
 
 apply plugin: 'org.labkey.rpackages'
+
+project.task("installMedimmuneDependencies",
+        type: InstallRPackage,
+        group: GroupNames.DEPLOY,
+        description: "Install MedImmune dependencies",
+        {
+          InstallRPackage task ->
+            task.packageNames = ["jsonlite", "tidyr", "xml2"]
+            task.installScript = "install-medimmune-dependencies.R"
+        })
+
+project.tasks.install.dependsOn(project.tasks.installMedimmuneDependencies)
