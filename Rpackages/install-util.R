@@ -39,15 +39,26 @@ check.installed <- function(mypkg)
     isInstalled
 }
 
-install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, rwin_deps=NULL)
+install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, rwin_deps=NULL, github_deps=NULL)
 {
     options(repos=structure(c(CRAN="http://cran.fhcrc.org/")))
+
+        # install any missing GitHub dependencies
+        github_deps <- github_deps[!sapply(github_deps, is.installed)]
+        if (length(github_deps) > 0) {
+            cat("installing GitHub dependencies:", github_deps, "\n")
+            install.packages("devtools", repos="http://cran.fhcrc.org", lib=libdir, INSTALL_opts=c("--no-multiarch"))
+            library("devtools")
+            install_github(github_deps)
+            remove.packages("devtools", libdir)
+            cat("installed GitHub dependencies.\n")
+        }
 
         # install any missing CRAN dependencies
         cran_deps <- cran_deps[!sapply(cran_deps, is.installed)]
         if (length(cran_deps) > 0) {
             cat("installing CRAN dependencies:", cran_deps, "\n")
-            install.packages(pkgs=cran_deps, lib=libdir, destdir=libdir, repos="http://cran.fhcrc.org/", INSTALL_opts=c("--no-multiarch"))
+            install.packages(pkgs=cran_deps, lib=libdir, repos="http://cran.fhcrc.org/", INSTALL_opts=c("--no-multiarch"))
             cat("installed CRAN dependencies.\n")
         }
 
@@ -56,7 +67,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         if (length(bioc_deps) > 0) {
             cat("installing BioConductor dependencies:", bioc_deps, "\n")
             source("http://bioconductor.org/biocLite.R")
-            biocLite(bioc_deps, lib=libdir, destdir=libdir, INSTALL_opts=c("--no-multiarch"))
+            biocLite(bioc_deps, lib=libdir, INSTALL_opts=c("--no-multiarch"))
             cat("installed BioConductor dependencies.\n")
         }
 
@@ -64,7 +75,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         rwin_deps <- rwin_deps[!sapply(rwin_deps, is.installed)]
         if (length(rwin_deps) > 0) {
             cat("installing RWin dependencies:", rwin_deps, "\n")
-            install.packages(pkgs=rwin_deps, lib=libdir, destdir=libdir, repos=c("http://cran.fhcrc.org/", "http://www.stats.ox.ac.uk/pub/RWin"), INSTALL_opts=c("--no-multiarch"))
+            install.packages(pkgs=rwin_deps, lib=libdir, repos=c("http://cran.fhcrc.org/", "http://www.stats.ox.ac.uk/pub/RWin"), INSTALL_opts=c("--no-multiarch"))
             cat("installed RWin dependencies.\n")
         }
 }
