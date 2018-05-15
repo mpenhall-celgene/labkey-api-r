@@ -15,4 +15,4 @@
 ##
 
 source("install-util.R")
-install.dependencies("MedImmune", c("jsonlite", "tidyr", "xml2"))
+install.dependencies("MedImmune", c("doBy", "gdata", "jsonlite", "openxlsx", "tidyr", "xml2"))

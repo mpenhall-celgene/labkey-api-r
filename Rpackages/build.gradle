@@ -28,7 +28,7 @@ project.task("installMedimmuneDependencies",
         description: "Install MedImmune dependencies",
         {
           InstallRPackage task ->
-            task.packageNames = ["jsonlite", "tidyr", "xml2"]
+            task.packageNames = ["doBy", "gdata", "jsonlite", "openxlsx", "tidyr", "xml2"]
             task.installScript = "install-medimmune-dependencies.R"
         })
 
