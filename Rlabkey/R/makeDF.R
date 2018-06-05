@@ -43,7 +43,7 @@ makeDF <- function(rawdata, colSelect=NULL, showHidden, colNameOpt)
 	}
 	if(!is.null(colSelectVector) & length(colSelectVector)>0){
 		for(i in 1:length(colSelectVector)){
-			if(!(colSelectVector[[i]] %in% colModelNames) & !(colSelectVector[[i]] %in% colModelLabels) & !(colSelectVector[[i]] %in% colModelRNames)){
+			if(colSelectVector[[i]] != "*" & !(colSelectVector[[i]] %in% colModelNames) & !(colSelectVector[[i]] %in% colModelLabels) & !(colSelectVector[[i]] %in% colModelRNames)){
 				stop(paste('The column "',colSelectVector[[i]],'" specified in the colSelect variable does not exist in the result set. Be sure you are using the column name for colNameOpt="fieldname" and the column label for colNameOpt="caption". See the documentation for more details.',sep=''))
 			}
 		}
