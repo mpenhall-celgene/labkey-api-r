@@ -5,10 +5,16 @@ buildscript {
   repositories {
     jcenter()
     maven {
-      url "${artifactory_contextUrl}/${gradlePluginsVersion.endsWith('SNAPSHOT') ? 'plugins-snapshot-local' : 'plugins-release'}"
+      url "${artifactory_contextUrl}/libs-release"
     }
     maven {
-      url "${artifactory_contextUrl}/libs-release"
+      url "${artifactory_contextUrl}/plugins-release"
+    }
+    if (gradlePluginsVersion.contains("SNAPSHOT"))
+    {
+      maven {
+        url "${artifactory_contextUrl}/plugins-snapshot-local"
+      }
     }
   }
   dependencies {
