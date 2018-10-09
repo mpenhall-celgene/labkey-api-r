@@ -5,7 +5,8 @@
 Create an experiment data object.
 }
 \usage{
-labkey.experiment.createData(config, dataClassId = NULL, dataClassName = NULL, dataFileUrl = NULL)
+labkey.experiment.createData(config,
+    dataClassId = NULL, dataClassName = NULL, dataFileUrl = NULL)
 }
 \arguments{
   \item{config}{a list of base experiment object properties}
@@ -34,10 +35,14 @@ library(Rlabkey)
 
 ## create a non-assay backed run with data classes as data inputs and outputs
 
-d1 <- labkey.experiment.createData(list(name = "dc-01"), dataClassId = 400)
-d2 <- labkey.experiment.createData(list(name = "dc-02"), dataClassId = 402)
-run <- labkey.experiment.createRun(list(name="new run"), dataInputs = d1, dataOutputs = d2)
-labkey.experiment.saveBatch(baseUrl="http://labkey/", folderPath="home", protocolName=labkey.experiment.SAMPLE_DERIVATION_PROTOCOL, runList=run)
+d1 <- labkey.experiment.createData(
+        list(name = "dc-01"), dataClassId = 400)
+d2 <- labkey.experiment.createData(
+        list(name = "dc-02"), dataClassId = 402)
+run <- labkey.experiment.createRun(
+        list(name="new run"), dataInputs = d1, dataOutputs = d2)
+labkey.experiment.saveBatch(baseUrl="http://labkey/", folderPath="home",
+        protocolName=labkey.experiment.SAMPLE_DERIVATION_PROTOCOL, runList=run)
 }
 }
 \keyword{IO}
