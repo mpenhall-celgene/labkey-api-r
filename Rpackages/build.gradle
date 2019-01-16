@@ -24,14 +24,16 @@ buildscript {
 
 apply plugin: 'org.labkey.rpackages'
 
-project.task("installMedimmuneDependencies",
-        type: InstallRPackage,
-        group: GroupNames.DEPLOY,
-        description: "Install MedImmune dependencies",
+project.tasks.register("installMedimmuneDependencies", InstallRPackage)
         {
-          InstallRPackage task ->
-            task.packageNames = ["doBy", "gdata", "jsonlite", "openxlsx", "tidyr", "xml2"]
-            task.installScript = "install-medimmune-dependencies.R"
-        })
+            InstallRPackage task ->
+                task.group = GroupNames.DEPLOY
+                task.description = "Install MedImmune dependencies"
+                task.packageNames = ["doBy", "gdata", "jsonlite", "openxlsx", "tidyr", "xml2"]
+                task.installScript = "install-medimmune-dependencies.R"
+        }
 
-project.tasks.install.dependsOn(project.tasks.installMedimmuneDependencies)
+project.tasks.named("install").configure
+        {
+            dependsOn(project.tasks.installMedimmuneDependencies)
+        }
