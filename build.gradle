@@ -35,6 +35,8 @@ project.task(
                         project.ant.exec(executable: "R", dir: project.buildDir, output: buildOutputFile)
                         {
                             arg(line: "CMD build ${project.projectDir}/Rlabkey")
+                            if (System.getenv("R_LIBS_USER") != null)
+                                env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
                         }
                         project.copy {CopySpec copy ->
                             copy.from project.buildDir
@@ -46,6 +48,8 @@ project.task(
                             project.ant.exec(executable: "R", dir: project.buildDir, output: buildOutputFile)
                             {
                                 arg(line: "CMD INSTALL --build ${project.projectDir}/build/*.tar.gz")
+                                if (System.getenv("R_LIBS_USER") != null)
+                                    env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
                             }
                         }
                         project.copy {CopySpec copy ->
@@ -82,13 +86,17 @@ project.task(
                     project.ant.exec(executable: "Rterm", dir: latestDir, input: project.file('test/instwin.r'), output: buildOutputFile)
                     {
                         arg(line: "--vanilla")
+                        if (System.getenv("R_LIBS_USER") != null)
+                            env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
                     }
                 }
                 if (Os.isFamily(Os.FAMILY_UNIX))
                 {
                     project.ant.exec(executable: "R", output: buildOutputFile)
                     {
-                        arg(line: "CMD", "INSTALL Rlabkey")
+                        arg(line: "CMD INSTALL Rlabkey")
+                        if (System.getenv("R_LIBS_USER") != null)
+                            env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
                     }
                 }
             }
