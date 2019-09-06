@@ -1,4 +1,5 @@
-Changes in version 2.3.3
+Changes in version 2.3.2
+  o Fix typo in labkey.webdav.put for generated Rlabkey.pdf (Issue 37739)
   o Issue 38427: In Rlabkey, labkey.selectRows with colNameOpt="rname" does not sanitize "::"
 
 Changes in version 2.3.1
