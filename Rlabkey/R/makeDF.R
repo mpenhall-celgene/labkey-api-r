@@ -83,7 +83,6 @@ makeDF <- function(rawdata, colSelect=NULL, showHidden, colNameOpt)
         }
         hide <- c(hide, colHidden)
     }
-
   	refdf <- data.frame(cnames,hindex,hide)
 
 	## Check for no rows returned, put data in data frame 
@@ -196,18 +195,17 @@ return(filtered)
 {
 	rname <- gsub("::", "--", lkname)
 	rname <- tolower(chartr(" /", "__", rname))
-		
+
 	if (length(existing)>0)
-	{
+	{ 
 		for (i in 1:99)
 		{
 			if(length(existing[rname == existing]) ==0)
 				{break;}
-			else
-			{rname <- c(rname + i)}
-		}
-	}    
-	
+			else 
+				{rname<- c(rname + as.character(i))}
+        } 
+  	}    	
   	return (rname)
 }
 
