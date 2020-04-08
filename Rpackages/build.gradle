@@ -32,7 +32,7 @@ project.tasks.register("clean", Delete) {
         task.description = "Delete user directory containing R libraries (${rLibsUserPath})"
         task.configure({
             DeleteSpec delete ->
-                if (rLibsUserPath != null)
+                if (rLibsUserPath != null && new File(rLibsUserPath).exists())
                     delete.delete rLibsUserPath
         })
 }
