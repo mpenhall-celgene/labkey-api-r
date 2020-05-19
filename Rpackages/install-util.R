@@ -41,13 +41,13 @@ check.installed <- function(mypkg)
 
 install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, rwin_deps=NULL, github_deps=NULL)
 {
-    options(repos=structure(c(CRAN="http://cran.fhcrc.org/")))
+    options(repos=structure(c(CRAN="https://cran.rstudio.com/")))
 
         # install any missing GitHub dependencies
         github_deps <- github_deps[!sapply(github_deps, is.installed)]
         if (length(github_deps) > 0) {
             cat("installing GitHub dependencies:", github_deps, "\n")
-            install.packages("devtools", repos="http://cran.fhcrc.org", lib=libdir, INSTALL_opts=c("--no-multiarch"))
+            install.packages("devtools", repos="https://cran.rstudio.com", lib=libdir, INSTALL_opts=c("--no-multiarch"))
             library("devtools")
             install_github(github_deps)
             remove.packages("devtools", libdir)
@@ -58,7 +58,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         cran_deps <- cran_deps[!sapply(cran_deps, is.installed)]
         if (length(cran_deps) > 0) {
             cat("installing CRAN dependencies:", cran_deps, "\n")
-            install.packages(pkgs=cran_deps, lib=libdir, repos="http://cran.fhcrc.org/", INSTALL_opts=c("--no-multiarch"))
+            install.packages(pkgs=cran_deps, lib=libdir, repos="https://cran.rstudio.com/", INSTALL_opts=c("--no-multiarch"))
             cat("installed CRAN dependencies.\n")
         }
 
@@ -75,7 +75,7 @@ install.dependencies <- function (packageName, cran_deps=NULL, bioc_deps=NULL, r
         rwin_deps <- rwin_deps[!sapply(rwin_deps, is.installed)]
         if (length(rwin_deps) > 0) {
             cat("installing RWin dependencies:", rwin_deps, "\n")
-            install.packages(pkgs=rwin_deps, lib=libdir, repos=c("http://cran.fhcrc.org/", "http://www.stats.ox.ac.uk/pub/RWin"), INSTALL_opts=c("--no-multiarch"))
+            install.packages(pkgs=rwin_deps, lib=libdir, repos=c("https://cran.rstudio.com/", "http://www.stats.ox.ac.uk/pub/RWin"), INSTALL_opts=c("--no-multiarch"))
             cat("installed RWin dependencies.\n")
         }
 }
