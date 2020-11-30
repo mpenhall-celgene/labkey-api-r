@@ -19,6 +19,7 @@ export(labkey.experiment.SAMPLE_DERIVATION_PROTOCOL)
 export(labkey.getModuleProperty)
 export(labkey.setModuleProperty)
 export(labkey.getBaseUrl)
+export(labkey.getRequestOptions)
 
 S3method(print, LabkeySession)
 S3method(print, LabkeySchemaList)
