@@ -1,8 +1,8 @@
 \name{labkey.webdav.put}
 \alias{labkey.webdav.put}
-\title{Download a file via WebDAV}
+\title{Upload a file via WebDAV}
 \description{
-This will download a file from a LabKey Server using WebDAV.
+This will upload a file to a LabKey Server using WebDAV.
 }
 \usage{
 labkey.webdav.put(

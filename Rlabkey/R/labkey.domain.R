@@ -39,6 +39,8 @@ labkey.domain.get <- function(baseUrl=NULL, folderPath, schemaName, queryName)
     if (is.null(result$schemaName)) result$schemaName = NA
     if (is.null(result$queryName)) result$queryName = NA
     if (is.null(result$templateDescription)) result$templateDescription = NA
+    if (is.null(result$instructions)) result$instructions = NA
+    if (is.null(result$domainKindName)) result$domainKindName = NA
 
     return (result)
 }
@@ -68,20 +70,48 @@ labkey.domain.save <- function(baseUrl=NULL, folderPath, schemaName, queryName, 
 
 ## Helper function to create the domain design list
 ##
-labkey.domain.createDesign <- function(name, description, fields)
+labkey.domain.createDesign <- function(name, description = NULL, fields, indices = NULL)
 {
     ## check required parameters
     if (missing(name) || missing(fields))
         stop (paste("A value must be specified for each of name and fields."))
 
     if (!is.list(fields))
-        stop (paste("fields must be a list of field definitions."))
+        stop (paste("The 'fields' parameter must be a list of field definitions."))
 
     dd <- list(name = name, fields = fields$fields)
+
     if (!missing(description))
         dd$description = description
 
+    if (!missing(indices)) {
+        if (!is.list(indices))
+            stop (paste("The 'indices' parameter must be a list of index definitions (including a list of 'columnNames' and a 'unique' boolean)."))
+
+        dd$indices = indices
+    }
+
     return (dd)
+}
+
+## Helper function to create the domain design indices list
+##
+labkey.domain.createIndices <- function(colNames, asUnique, existingIndices = NULL)
+{
+    if (!is.list(colNames))
+        stop (paste("The 'colNames' parameter must be a list of column names."))
+
+    if (!is.logical(asUnique))
+        stop (paste("The 'asUnique' parameter must be a logical value of either TRUE or FALSE."))
+
+    columnNames <- list(colNames)
+    unique <- list(tolower(toString(asUnique)))
+    indices = as.data.frame(cbind(columnNames, unique))
+
+    if (!missing(existingIndices))
+        indices = rbind(existingIndices, indices)
+
+    return (indices)
 }
 
 labkey.domain.create <- function(baseUrl=NULL, folderPath, domainKind=NULL, domainDesign=NULL, options=NULL,
@@ -213,3 +243,75 @@ labkey.domain.createAndLoad <- function(baseUrl=NULL, folderPath, name, descript
 
     labkey.insertRows(baseUrl = baseUrl, folderPath = folderPath, schemaName = schemaName, queryName= name, df)
 }
+
+labkey.domain.createConditionalFormat <- function(queryFilter, bold=FALSE, italic=FALSE, strikeThrough=FALSE, textColor="", backgroundColor="")
+{
+    data.frame(filter = queryFilter, bold = bold, strikethrough = strikeThrough, italic = italic, textColor = textColor, backgroundColor = backgroundColor)
+}
+
+labkey.domain.createConditionalFormatQueryFilter <- function(filterType, value, additionalFilter=NULL, additionalValue=NULL)
+{
+    qf1 <- makeFilter(c("format.column", filterType, value))[1]
+    qf2 <- NULL
+
+    if (!is.null(additionalValue) || !is.null(additionalFilter))
+        qf2 <- makeFilter(c("format.column", additionalFilter, additionalValue))[1]
+
+    qf <- if(is.null(qf2)) qf1 else paste0(qf1, "&", qf2)
+    return(qf)
+}
+
+labkey.domain.FILTER_TYPES <-
+  list(
+        HAS_ANY_VALUE = '',
+
+        EQUAL = 'eq',
+        DATE_EQUAL = 'dateeq',
+
+        NEQ = 'neq',
+        NOT_EQUAL = 'neq',
+        DATE_NOT_EQUAL = 'dateneq',
+
+        NEQ_OR_NULL = 'neqornull',
+        NOT_EQUAL_OR_MISSING = 'neqornull',
+
+        GT = 'gt',
+        GREATER_THAN = 'gt',
+        DATE_GREATER_THAN = 'dategt',
+
+        LT = 'lt',
+        LESS_THAN = 'lt',
+        DATE_LESS_THAN = 'datelt',
+
+        GTE = 'gte',
+        GREATER_THAN_OR_EQUAL = 'gte',
+        DATE_GREATER_THAN_OR_EQUAL = 'dategte',
+
+        LTE = 'lte',
+        LESS_THAN_OR_EQUAL = 'lte',
+        DATE_LESS_THAN_OR_EQUAL = 'datelte',
+
+        STARTS_WITH = 'startswith',
+        DOES_NOT_START_WITH = 'doesnotstartwith',
+
+        CONTAINS = 'contains',
+        DOES_NOT_CONTAIN = 'doesnotcontain',
+
+        CONTAINS_ONE_OF = 'containsoneof',
+        CONTAINS_NONE_OF = 'containsnoneof',
+
+        IN = 'in',
+
+        EQUALS_ONE_OF = 'in',
+
+        NOT_IN = 'notin',
+        EQUALS_NONE_OF = 'notin',
+
+        BETWEEN = 'between',
+        NOT_BETWEEN = 'notbetween',
+
+        IS_BLANK = 'isblank',
+        IS_NOT_BLANK = 'isnonblank',
+
+        MEMBER_OF = 'memberof'
+    )

@@ -18,8 +18,8 @@ schema objects (\code{labkey.getSchema}).
 \tabular{ll}{
 Package: \tab Rlabkey\cr
 Type: \tab Package\cr
-Version: \tab 2.2.5\cr
-Date: \tab 2019-03-04\cr
+Version: \tab 2.5.4\cr
+Date: \tab 2020-11-03\cr
 License: \tab Apache License 2.0\cr
 LazyLoad: \tab yes\cr
 }
@@ -58,7 +58,7 @@ Multiple such blocks can exist in one file.
 \author{Valerie Obenchain
 }
 \references{http://www.omegahat.net/RCurl/,\cr
-http://www.labkey.org/project/home/begin.view}
+https://www.labkey.org/project/home/begin.view}
 \keyword{ package }
 \seealso{
 \code{\link{labkey.selectRows}}, \code{\link{labkey.executeSql}}, \code{\link{makeFilter}}, 

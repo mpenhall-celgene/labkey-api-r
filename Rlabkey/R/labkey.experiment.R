@@ -66,7 +66,7 @@ labkey.experiment.createMaterial <- function(config, sampleSetId = NULL, sampleS
 
 ## Create an ExpRun object
 ##
-labkey.experiment.createRun <- function(config, dataInputs = NULL, dataOutputs = NULL, dataRows = NULL, materialInputs = NULL, materialOutputs = NULL)
+labkey.experiment.createRun <- function(config, dataInputs = NULL, dataOutputs = NULL, dataRows = NULL, materialInputs = NULL, materialOutputs = NULL, plateMetadata = NULL)
 {
     ## check required parameters
     if (missing(config))
@@ -126,6 +126,11 @@ labkey.experiment.createRun <- function(config, dataInputs = NULL, dataOutputs =
 
         run$dataRows <- rowsVector
     }
+
+    if (!is.null(plateMetadata))
+    {
+        run$plateMetadata = plateMetadata;
+    }
     return (run)
 }
 
@@ -141,7 +146,7 @@ ensureNestedList <- function(data)
     return (data)
 }
 
-labkey.experiment.saveBatch <- function(baseUrl=NULL, folderPath, assayConfig = NULL, protocolName = NULL, runList)
+labkey.experiment.saveBatch <- function(baseUrl=NULL, folderPath, assayConfig = NULL, protocolName = NULL, batchPropertyList = NULL, runList)
 {
     baseUrl=labkey.getBaseUrl(baseUrl)
 
@@ -165,9 +170,36 @@ labkey.experiment.saveBatch <- function(baseUrl=NULL, folderPath, assayConfig = 
         params = list()
         params$protocolName = protocolName
     }
-    params$batch = list(runs = ensureNestedList(runList))
+    params$batch = c(batchPropertyList, list(runs = ensureNestedList(runList)))
 
     response <- labkey.post(url, toJSON(params, auto_unbox=TRUE))
 
 	return (fromJSON(response, simplifyVector=FALSE, simplifyDataFrame=FALSE))
+}
+
+labkey.experiment.saveRuns <- function(baseUrl=NULL, folderPath, protocolName, runList)
+{
+    baseUrl=labkey.getBaseUrl(baseUrl)
+
+    ## Validate required parameters
+    if (missing(folderPath)) stop (paste("A value must be specified for folderPath."))
+    if (missing(protocolName)) stop (paste("A value must be specified for protocolName."))
+    if (missing(runList)) stop (paste("A value must be specified for runList."))
+
+    ## normalize the folder path
+    folderPath <- encodeFolderPath(folderPath)
+
+    ## Now post form with runs object filled out
+    url <- paste(baseUrl, "assay", folderPath, "saveAssayRuns.api", sep="")
+
+    if (!is.null(runList))
+    {
+        params = list()
+        params$protocolName = protocolName
+    }
+    params$runs = ensureNestedList(runList)
+
+    response <- labkey.post(url, toJSON(params, auto_unbox=TRUE))
+
+    return (fromJSON(response, simplifyVector=FALSE, simplifyDataFrame=FALSE))
 }

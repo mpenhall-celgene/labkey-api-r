@@ -1,104 +1,94 @@
-import org.apache.tools.ant.taskdefs.condition.Os
+import org.labkey.gradle.task.InstallRPackage
+import org.labkey.gradle.util.GroupNames
 
-File latestDir = project.file("latest");
-File buildOutputFile = new File(project.buildDir, "commands.out")
-
-project.task(
-        "check",
-        group: "RBuild",
-        description: "Run validation checks on the Rlabkey package",
-        {Task task ->
-            task.outputs.dir project.file("${latestDir}/Rlabkey.Rcheck")
-            task.outputs.dir project.file("Rlabkey/src-i386")
-            task.outputs.dir project.file("Rlabkey/src-x64")
-            task.outputs.files project.fileTree(dir: "Rlabkey/src", includes: ["*.o", "*.dll"])
+buildscript {
+    repositories {
+        maven {
+            url "${artifactory_contextUrl}/plugins-release"
         }
+        if (gradlePluginsVersion.contains("SNAPSHOT"))
+        {
+            maven {
+                url "${artifactory_contextUrl}/plugins-snapshot-local"
+            }
+        }
+    }
+    dependencies {
+        classpath "org.labkey.build:gradlePlugins:${gradlePluginsVersion}"
+    }
+    configurations.all {
+        // Check for updates every build for SNAPSHOT dependencies
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+}
 
-).doLast {
-    project.ant.exec(executable: "R", output: buildOutputFile)
-                {
-                    arg(line:"CMD check --no-examples --as-cran ${latestDir}/*.tar.gz")
+File buildOutputFile = new File(project.buildDir, "commands.out")
+String rLibsUserPath = InstallRPackage.getRLibsUserPath(project)
+String rExe = InstallRPackage.getRPath()
+
+
+project.tasks.register("check") {
+    Task task ->
+        group GroupNames.VERIFICATION
+        description "Run validation checks on the Rlabkey package"
+        task.outputs.dir project.file("${project.buildDir}/Rlabkey.Rcheck")
+        task.outputs.dir project.file("Rlabkey/src-i386")
+        task.outputs.dir project.file("Rlabkey/src-x64")
+        task.outputs.files project.fileTree(dir: "Rlabkey/src", includes: ["*.o", "*.dll"])
+
+        task.doLast {
+            File[] existingFiles = buildDir.listFiles(new FilenameFilter() {
+                @Override
+                boolean accept(File dir, String name) {
+                    return name.endsWith(".tar.gz");
                 }
+            })
+            if (existingFiles.length > 0) {
+                project.ant.exec(
+                        executable: rExe,
+                        output: buildOutputFile,
+                        append: true,
+                        dir: project.buildDir,
+                        logError: true
+                )
+                        {
+                            arg(line: "CMD check --no-examples --as-cran ${existingFiles[0]}")
+                        }
+            }
+        }
+        task.dependsOn build
 }
 
 
-project.task(
-        "build",
-        group: "RBuild",
-        description: "Build the Rlabkey package that can be installed and tested in R. Builds binary package on windows, source only on unix",
-        {Task task ->
-            task.inputs.files project.fileTree(dir: "Rlabkey", excludes: ["src-i386", "src-x64"]).files
-            task.outputs.dir project.buildDir
-            task.doFirst(
-                    {
-                        project.buildDir.mkdirs()
-                        project.ant.exec(executable: "R", dir: project.buildDir, output: buildOutputFile)
-                        {
-                            arg(line: "CMD build ${project.projectDir}/Rlabkey")
-                            if (System.getenv("R_LIBS_USER") != null)
-                                env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
-                        }
-                        project.copy {CopySpec copy ->
-                            copy.from project.buildDir
-                            copy.include '*.tar.gz'
-                            copy.into latestDir
-                        }
-                        if (Os.isFamily(Os.FAMILY_WINDOWS))
-                        {
-                            project.ant.exec(executable: "R", dir: project.buildDir, output: buildOutputFile)
+project.tasks.register("build") {
+    Task task ->
+        task.group GroupNames.BUILD
+        task.description "Build the Rlabkey package that can be installed and tested in R. Builds binary package on windows, source only on unix"
+        task.inputs.files project.fileTree(dir: "Rlabkey", excludes: ["src-i386", "src-x64"]).files
+        task.outputs.dir project.buildDir
+        task.doFirst(
+                {
+                    project.buildDir.mkdirs()
+                    project.ant.exec(
+                            executable: rExe,
+                            dir: project.buildDir,
+                            output: buildOutputFile,
+                            append: true,
+                            logError: true
+                    )
                             {
-                                arg(line: "CMD INSTALL --build ${project.projectDir}/build/*.tar.gz")
-                                if (System.getenv("R_LIBS_USER") != null)
-                                    env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
+                                arg(line: "CMD build ${project.projectDir}/Rlabkey")
+                                if (rLibsUserPath != null)
+                                    env(key: "R_LIBS_USER", value: rLibsUserPath)
                             }
-                        }
-                        project.copy {CopySpec copy ->
-                            copy.from project.buildDir
-                            copy.include '*.zip'
-                            copy.into latestDir
-                        }
-                    }
-            )
-        }
-)
-
-project.tasks.check.dependsOn(project.tasks.build)
-
-project.task(
-        "clean",
-        group: "RBuild",
-        description: "Deletes all non-versioned files generated during the build process",
-        type: Delete,
-        {
-            delete project.tasks.check
-            delete project.tasks.build
-        }
-)
-
-project.task(
-        "install",
-        group: "RBuild",
-        description: "install the Rlabkey package to the local R instance. Must be run as administrator.",
-        {
-            doFirst {
-                if (Os.isFamily(Os.FAMILY_WINDOWS))
-                {
-                    project.ant.exec(executable: "Rterm", dir: latestDir, input: project.file('test/instwin.r'), output: buildOutputFile)
-                    {
-                        arg(line: "--vanilla")
-                        if (System.getenv("R_LIBS_USER") != null)
-                            env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
-                    }
                 }
-                if (Os.isFamily(Os.FAMILY_UNIX))
-                {
-                    project.ant.exec(executable: "R", output: buildOutputFile)
-                    {
-                        arg(line: "CMD INSTALL Rlabkey")
-                        if (System.getenv("R_LIBS_USER") != null)
-                            env(key: "R_LIBS_USER", value: System.getenv("R_LIBS_USER"))
-                    }
-                }
-            }
-        }
-)
+        )
+}
+
+
+project.tasks.register("clean", Delete) {
+        group GroupNames.BUILD
+        description "Deletes all non-versioned files generated during the build process"
+        delete project.tasks.check
+        delete project.tasks.build
+}
